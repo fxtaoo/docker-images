@@ -1,0 +1,94 @@
+name: 构建推送
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  caddy-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install curl jq
+        run: sudo apt upgrade && sudo apt install -y curl jq
+
+      - name: Set env CADDY_VERSION
+        run: echo "CADDY_VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/caddy/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
+
+      - name: Set env CADDY_TAG
+        run: echo "CADDY_TAG=$(echo ${{ env.CADDY_VERSION }} | sed 's/^v//')" >> $GITHUB_ENV
+
+      - name: Set env DOCKER_HUB_CADDY_VERSION
+        run: echo "DOCKER_HUB_CADDY_VERSION=$(curl --silent https://registry.hub.docker.com/v2/repositories/fxtaoo/caddy/tags | jq -r '.results | .[1] | .name')" >> $GITHUB_ENV
+
+      - name: Set env XCADDY_VERSION
+        if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
+        run: echo "XCADDY_VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/xcaddy/releases/latest" | jq -r .tag_name | sed 's/^v//')" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./caddy
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            XCADDY_VERSION=${{ env.XCADDY_VERSION }}
+            CADDY_VERSION=${{ env.CADDY_VERSION }}
+          tags: |
+            fxtaoo/caddy:latest
+            fxtaoo/caddy:${{ env.CADDY_TAG }}
+
+  xray-core-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install curl jq
+        run: sudo apt upgrade && sudo apt install -y curl jq
+
+      - name: Set env XRAY_VERSION
+        run: echo "XRAY_VERSION=$(curl --silent "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
+
+      - name: Set env XRAY_TAG
+        run: echo "XRAY_TAG=$(echo ${{ env.XRAY_VERSION }} | sed 's/^v//')" >> $GITHUB_ENV
+
+      - name: Set env DOCKER_HUB_XRAY_VERSION
+        run: echo "DOCKER_HUB_XRAY_VERSION=$(curl --silent https://registry.hub.docker.com/v2/repositories/fxtaoo/xray-core/tags | jq -r '.results | .[1] | .name')" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        if: ${{ env.XRAY_TAG != env.DOCKER_HUB_XRAY_VERSION }}
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        if: ${{ env.XRAY_TAG != env.DOCKER_HUB_XRAY_VERSION }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        if: ${{ env.XRAY_TAG != env.DOCKER_HUB_XRAY_VERSION }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./xray-core
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            XXRAY_VERSION=${{ env.XXRAY_VERSION }}
+            XRAY_VERSION=${{ env.XRAY_VERSION }}
+          tags: |
+            fxtaoo/xray-core:latest
+            fxtaoo/xray-core:${{ env.XRAY_TAG }}
