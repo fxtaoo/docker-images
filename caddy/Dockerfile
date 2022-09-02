@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine
+FROM golang:alpine
 
 ARG XCADDY_VERSION=0.3.0
 ARG CADDY_VERSION=v2.5.2
@@ -14,11 +14,13 @@ RUN set -eux; \
 
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates mailcap
-
 COPY --chmod=0755 --from=0 /tmp/xcaddy/caddy /usr/bin/caddy
 
 RUN set -eux; \
+    apk add --no-cache ca-certificates mailcap tzdata ; \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime ; \
+    echo "Asia/Shanghai" > /etc/timezone ; \
+    apk del tzdata ; \
     mkdir -p /config/caddy /data/caddy /etc/caddy /usr/share/caddy ; \
     wget https://raw.githubusercontent.com/fxtaoo/docker-images/master/caddy/Caddyfile -P /etc/caddy;  \
     wget https://raw.githubusercontent.com/fxtaoo/docker-images/master/caddy/index.html -P /usr/share/caddy;
