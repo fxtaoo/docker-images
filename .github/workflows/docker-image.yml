@@ -39,7 +39,7 @@ jobs:
         if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
         uses: docker/build-push-action@v3
         with:
-          context: ./caddy
+          context: "{{defaultContext}}:caddy"
           file: ./Dockerfile
           push: true
           build-args: |
@@ -79,7 +79,7 @@ jobs:
         if: ${{ env.XRAY_TAG != env.DOCKER_HUB_XRAY_VERSION }}
         uses: docker/build-push-action@v3
         with:
-          context: ./xray-core
+          context: "{{defaultContext}}:xray-core"
           file: ./Dockerfile
           push: true
           build-args: |
