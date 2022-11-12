@@ -1,6 +1,6 @@
 # Caddy
 
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/fxtaoo/docker-images/tree/master/caddy)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/fxtaoo/caddy)
 
 使用 [xcaddy - Custom Caddy Builder](https://github.com/caddyserver/xcaddy) 构建并推送最新版本 [caddy](https://github.com/caddyserver/caddy) 镜像。
 
