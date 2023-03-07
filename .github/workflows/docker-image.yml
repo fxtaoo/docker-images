@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: install curl jq
-        run: sudo apt upgrade && sudo apt install -y curl jq
+        run: sudo apt-get update & sudo apt-get install -y curl jq
 
       - name: Set env CADDY_VERSION
         run: echo "CADDY_VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/caddy/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build and push
         if: ${{ env.CADDY_TAG != env.DOCKER_HUB_CADDY_VERSION }}
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: "{{defaultContext}}:caddy"
           file: ./Dockerfile
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: install curl jq
-        run: sudo apt upgrade && sudo apt install -y curl jq
+        run: sudo apt-get update & sudo apt-get install -y curl jq
 
       - name: Set env XRAY_VERSION
         run: echo "XRAY_VERSION=$(curl --silent "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
@@ -81,13 +81,12 @@ jobs:
 
       - name: Build and push
         if: ${{ env.XRAY_TAG != env.DOCKER_HUB_XRAY_VERSION }}
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: "{{defaultContext}}:xray-core"
           file: ./Dockerfile
           push: true
           build-args: |
-            XXRAY_VERSION=${{ env.XXRAY_VERSION }}
             XRAY_VERSION=${{ env.XRAY_VERSION }}
           tags: |
             fxtaoo/xray-core:latest
