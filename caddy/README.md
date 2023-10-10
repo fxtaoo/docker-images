@@ -11,3 +11,5 @@
 + [Cloudflare module for Caddy](https://github.com/caddy-dns/cloudflare)
 + [Caddy replace_response handler module](https://github.com/caddyserver/replace-response)
 
+参考：
+[caddy-docker](https://github.com/caddyserver/caddy-docker/tree/master)
