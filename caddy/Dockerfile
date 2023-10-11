@@ -1,13 +1,13 @@
 FROM golang:alpine
 
+ARG VERSION=v2.7.4
 ARG XCADDY_VERSION=0.3.5
-ARG CADDY_VERSION=v2.7.4
 
 WORKDIR /tmp/xcaddy
 
 RUN set -eux \
     ; wget -c "https://github.com/caddyserver/xcaddy/releases/download/v${XCADDY_VERSION}/xcaddy_${XCADDY_VERSION}_linux_amd64.tar.gz" -O - | tar -xz \
-    && ./xcaddy build ${CADDY_VERSION} \
+    && ./xcaddy build ${VERSION} \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/caddyserver/replace-response
 
