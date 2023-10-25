@@ -19,7 +19,6 @@ jobs:
         run: |
           echo "VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/caddy/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
           echo "DOCKER_HUB_TAG=$(curl --silent https://registry.hub.docker.com/v2/repositories/fxtaoo/caddy/tags | jq -r '.results | .[1] | .name')" >> $GITHUB_ENV
-          echo "XCADDY_VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/xcaddy/releases/latest" | jq -r .tag_name | sed 's/^v//')" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
         if: ${{ env.VERSION != env.DOCKER_HUB_TAG }}
@@ -41,7 +40,6 @@ jobs:
           push: true
           build-args: |
             VERSION=${{ env.VERSION }}
-            XCADDY_VERSION=${{ env.XCADDY_VERSION }}
           tags: |
             fxtaoo/caddy:latest
             fxtaoo/caddy:${{ env.VERSION }}
