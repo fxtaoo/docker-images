@@ -12,9 +12,6 @@ jobs:
   caddy:
     runs-on: ubuntu-latest
     steps:
-      - name: install curl jq
-        run: sudo apt update & sudo apt install -y curl jq
-
       - name: Set GITHUB_ENV
         run: |
           echo "VERSION=$(curl --silent "https://api.github.com/repos/caddyserver/caddy/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
@@ -46,9 +43,6 @@ jobs:
   xray:
     runs-on: ubuntu-latest
     steps:
-      - name: install curl jq
-        run: sudo apt update & sudo apt install -y curl jq
-
       - name: Set GITHUB_ENV
         run: |
           echo "VERSION=$(curl --silent "https://api.github.com/repos/XTLS/Xray-core/releases/latest" | jq -r .tag_name)" >> $GITHUB_ENV
