@@ -66,8 +66,6 @@ jobs:
           context: "{{defaultContext}}:xray"
           file: ./Dockerfile
           push: true
-          build-args: |
-            VERSION=${{ env.VERSION }}
           tags: |
             fxtaoo/xray:latest
             fxtaoo/xray:${{ env.VERSION }}
