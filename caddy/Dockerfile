@@ -1,5 +1,7 @@
 FROM golang:alpine
 
+ARG XCADDY_GO_BUILD_FLAGS='-trimpath -ldflags "-s -w -buildid="'
+
 WORKDIR /tmp/xcaddy
 
 RUN set -eux \
