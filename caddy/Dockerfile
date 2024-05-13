@@ -9,7 +9,8 @@ RUN set -eux \
     && /go/bin/xcaddy build \
     --with github.com/caddy-dns/cloudflare \
     --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive \
-    --with github.com/mholt/caddy-ratelimit
+    --with github.com/mholt/caddy-ratelimit \
+    --with github.com/caddyserver/cache-handler
 
 FROM alpine:latest
 
