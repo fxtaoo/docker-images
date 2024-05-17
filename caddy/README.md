@@ -10,8 +10,6 @@
 添加插件如下：
 + [Cloudflare module for Caddy](https://github.com/caddy-dns/cloudflare)
 + [Secure forward proxy plugin for the Caddy web server](https://github.com/klzgrad/forwardproxy#secure-forward-proxy-plugin-for-the-caddy-web-server)
-+ [Caddy HTTP Rate Limit Module](https://github.com/mholt/caddy-ratelimit)
-+ [Caddy Module: http.handlers.cache](https://github.com/caddyserver/cache-handler)
 
 参考：
 [caddy-docker](https://github.com/caddyserver/caddy-docker/tree/master)
